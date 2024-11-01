@@ -1,119 +1,72 @@
 document.addEventListener("DOMContentLoaded", function () {
+    // Variables for Testimonial Slider
     const slides = document.querySelectorAll('.testimonial-slide');
     const nextButton = document.querySelector('.nav-arrow.next');
     const prevButton = document.querySelector('.nav-arrow.prev');
     const dots = document.querySelector('.nav-dots');
     let currentIndex = 0;
 
+    // Function to Show Slide
     function showSlide(index) {
-        slides.forEach((slide, i) => {
-            slide.style.display = 'none';
-            slide.style.opacity = 0;
-        });
-
-        slides[index].style.display = 'block';
+        slides.forEach((slide, i) => slide.style.display = i === index ? 'block' : 'none');
         gsap.to(slides[index], { opacity: 1, duration: 1 });
-    }
-
-    function nextSlide() {
-        currentIndex = (currentIndex + 1) % slides.length;
-        showSlide(currentIndex);
         updateDots();
     }
 
-    function prevSlide() {
-        currentIndex = (currentIndex - 1 + slides.length) % slides.length;
+    // Navigation Functions
+    function changeSlide(offset) {
+        currentIndex = (currentIndex + offset + slides.length) % slides.length;
         showSlide(currentIndex);
-        updateDots();
     }
 
+    // Dot Creation and Update Functions
     function createDots() {
         slides.forEach((_, i) => {
             const dot = document.createElement('div');
             dot.classList.add('nav-dot');
-            if (i === currentIndex) {
-                dot.classList.add('active');
-            }
-            dots.appendChild(dot);
+            if (i === currentIndex) dot.classList.add('active');
             dot.addEventListener('click', () => {
                 currentIndex = i;
                 showSlide(currentIndex);
-                updateDots();
             });
+            dots.appendChild(dot);
         });
     }
 
     function updateDots() {
-        document.querySelectorAll('.nav-dot').forEach((dot, i) => {
-            dot.classList.toggle('active', i === currentIndex);
-        });
+        document.querySelectorAll('.nav-dot').forEach((dot, i) => 
+            dot.classList.toggle('active', i === currentIndex)
+        );
     }
 
-    nextButton.addEventListener('click', nextSlide);
-    prevButton.addEventListener('click', prevSlide);
+    // Button Event Listeners
+    nextButton.addEventListener('click', () => changeSlide(1));
+    prevButton.addEventListener('click', () => changeSlide(-1));
 
+    // GSAP Animations
+    gsap.fromTo(".animated-heading", { y: -20, opacity: 0 }, { y: 0, opacity: 1, duration: 1.5 });
+    gsap.from(".info-box", { scrollTrigger: ".about-us", opacity: 0, y: 50, stagger: 0.3, duration: 0.6, ease: "power1.out" });
+
+    // Initial Setup
     createDots();
-    showSlide(currentIndex); // Initial display
-
-    // GSAP Animations for About Us Section
-    gsap.fromTo(".animated-heading", 
-        { y: -20, opacity: 0 }, // Initial state
-        { y: 0, opacity: 1, duration: 1.5 } // Final state
-    );
-    gsap.from(".info-box", {
-        scrollTrigger: ".about-us",
-        opacity: 0,
-        y: 50,
-        stagger: 0.3,
-        duration: 0.6,
-        ease: "power1.out"
-    });
+    showSlide(currentIndex);
 });
 
 document.addEventListener("DOMContentLoaded", function() {
-    // Select all links with hashes
-    const links = document.querySelectorAll('a[href^="#"]');
-
-    for (const link of links) {
+    // Smooth Scrolling for All Anchor Links
+    document.querySelectorAll('a[href^="#"]').forEach(link => {
         link.addEventListener("click", function(event) {
-            event.preventDefault(); // Prevent the default anchor behavior
-
+            event.preventDefault();
             const targetID = this.getAttribute("href").substring(1);
             const targetElement = document.getElementById(targetID);
-
             if (targetElement) {
-                window.scrollTo({
-                    top: targetElement.offsetTop,
-                    behavior: "smooth"
-                });
+                window.scrollTo({ top: targetElement.offsetTop - 80, behavior: "smooth" });
             }
-        });
-    }
-});
-
-window.onscroll = function() {
-    var winScroll = document.body.scrollTop || document.documentElement.scrollTop;
-    var height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-    var scrolled = (winScroll / height) * 100;
-    document.getElementById("scrollIndicator").style.width = scrolled + "%";
-};
-
-document.addEventListener('DOMContentLoaded', function () {
-    const navLinks = document.querySelectorAll('nav a');
-
-    navLinks.forEach(link => {
-        link.addEventListener('click', function (event) {
-            event.preventDefault();
-            const targetId = this.getAttribute('href').substring(1);
-            const targetSection = document.getElementById(targetId);
-
-            const offsetPosition = targetSection.offsetTop - 80; // Adjust the '80' value as per the height of your nav
-
-            window.scrollTo({
-                top: offsetPosition,
-                behavior: 'smooth'
-            });
         });
     });
 });
 
+window.onscroll = function() {
+    const scrolled = (window.scrollY / (document.documentElement.scrollHeight - document.documentElement.clientHeight)) * 100;
+    document.getElementById("scrollIndicator").style.width = scrolled + "%";
+};
