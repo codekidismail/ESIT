@@ -1,25 +1,21 @@
 document.addEventListener("DOMContentLoaded", function () {
-    // Variables for Testimonial Slider
     const slides = document.querySelectorAll('.testimonial-slide');
     const nextButton = document.querySelector('.nav-arrow.next');
     const prevButton = document.querySelector('.nav-arrow.prev');
     const dots = document.querySelector('.nav-dots');
     let currentIndex = 0;
 
-    // Function to Show Slide
     function showSlide(index) {
         slides.forEach((slide, i) => slide.style.display = i === index ? 'block' : 'none');
         gsap.to(slides[index], { opacity: 1, duration: 1 });
         updateDots();
     }
 
-    // Navigation Functions
     function changeSlide(offset) {
         currentIndex = (currentIndex + offset + slides.length) % slides.length;
         showSlide(currentIndex);
     }
 
-    // Dot Creation and Update Functions
     function createDots() {
         slides.forEach((_, i) => {
             const dot = document.createElement('div');
@@ -39,21 +35,17 @@ document.addEventListener("DOMContentLoaded", function () {
         );
     }
 
-    // Button Event Listeners
     nextButton.addEventListener('click', () => changeSlide(1));
     prevButton.addEventListener('click', () => changeSlide(-1));
 
-    // GSAP Animations
     gsap.fromTo(".animated-heading", { y: -20, opacity: 0 }, { y: 0, opacity: 1, duration: 1.5 });
     gsap.from(".info-box", { scrollTrigger: ".about-us", opacity: 0, y: 50, stagger: 0.3, duration: 0.6, ease: "power1.out" });
 
-    // Initial Setup
     createDots();
     showSlide(currentIndex);
 });
 
 document.addEventListener("DOMContentLoaded", function() {
-    // Smooth Scrolling for All Anchor Links
     document.querySelectorAll('a[href^="#"]').forEach(link => {
         link.addEventListener("click", function(event) {
             event.preventDefault();

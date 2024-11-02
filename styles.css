@@ -38,6 +38,7 @@ nav.nav-bar {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    height: 5rem;
 }
 
 nav .logo img {
@@ -932,4 +933,11 @@ footer {
 .btn-animated:hover {
     transform: scale(1.1);
     background-color: #ff8800;
+}
+
+.esit-logo {
+    color: white;
+    font-weight: 700;
+    font-family: 'Exo', sans-serif;
+    font-size: 3rem;
 }
